@@ -96,7 +96,7 @@ class Game {
     Monster monster = getRandomMonster();
     monster.showStatus();
     bool turn = true; // 캐릭터의 턴
-    while (monster.health > 0 || character.health > 0) {
+    while (monster.health > 0 && character.health > 0) {
       if (turn) {
         print('');
         print('${character.name}의 턴');
@@ -136,11 +136,7 @@ class Game {
         turn = true; // 턴을 캐릭터로 변경
       }
     }
-    print('');
-    if (character.health <= 0) {
-      print('${character.name}이(가) 쓰러졌습니다! 게임 오버!');
-      exit(0);
-    }
+
     print('${monster.name}을(를) 물리쳤습니다!');
     monstersDefeated++;
     monsters.remove(monster); // 몬스터 리스트에서 제거
