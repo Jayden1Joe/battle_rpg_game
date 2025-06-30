@@ -136,12 +136,18 @@ class Game {
         turn = true; // 턴을 캐릭터로 변경
       }
     }
-
+    print('');
+    if (character.health <= 0) {
+      print('${character.name}이(가) 쓰러졌습니다! 게임 오버!');
+      saveResult(false);
+      exit(0);
+    }
     print('${monster.name}을(를) 물리쳤습니다!');
     monstersDefeated++;
     monsters.remove(monster); // 몬스터 리스트에서 제거
     if (monsters.isEmpty) {
       print('모든 몬스터를 물리쳤습니다! 게임에서 승리했습니다!');
+      saveResult(true);
       exit(0);
     } else {
       stdout.write('다음 몬스터와 대결하시겠습니까? (y/n): ');
@@ -152,13 +158,36 @@ class Game {
           print('잘못된 입력입니다. y 또는 n을 입력해주세요.');
         }
       } while (nextChoice != 'y' && nextChoice != 'n');
+      print('');
       if (nextChoice == 'y') {
         print('다음 몬스터와 대결을 시작합니다!');
         battle(); // 다음 몬스터와 대결
       } else {
         print('게임을 종료합니다. 물리친 몬스터 수: $monstersDefeated');
+        saveResult(false);
         exit(0);
       }
+    }
+  }
+
+  void saveResult(bool isWin) {
+    stdout.write('결과를 저장하시겠습니까? (y/n): ');
+    String? saveChoice;
+    do {
+      saveChoice = stdin.readLineSync()?.toLowerCase();
+      if (saveChoice != 'y' && saveChoice != 'n') {
+        print('잘못된 입력입니다. y 또는 n을 입력해주세요.');
+      }
+    } while (saveChoice != 'y' && saveChoice != 'n');
+
+    if (saveChoice == 'y') {
+      final result =
+          '${character.name}, ${character.health}, ${isWin ? '승리' : '패배'}\n';
+      final file = File('data/result.txt');
+      file.writeAsStringSync(result.trim(), mode: FileMode.append);
+      print('결과가 result.txt 파일에 저장되었습니다.');
+    } else {
+      print('결과 저장을 취소했습니다.');
     }
   }
 
