@@ -136,8 +136,8 @@ class Game {
         turn = true; // 턴을 캐릭터로 변경
       }
     }
+    print('');
     if (character.health <= 0) {
-      print('');
       print('${character.name}이(가) 쓰러졌습니다! 게임 오버!');
       exit(0);
     }
@@ -145,11 +145,9 @@ class Game {
     monstersDefeated++;
     monsters.remove(monster); // 몬스터 리스트에서 제거
     if (monsters.isEmpty) {
-      print('');
       print('모든 몬스터를 물리쳤습니다! 게임에서 승리했습니다!');
       exit(0);
     } else {
-      print('');
       stdout.write('다음 몬스터와 대결하시겠습니까? (y/n): ');
       String? nextChoice;
       do {
