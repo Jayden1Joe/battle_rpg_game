@@ -54,7 +54,22 @@ class Game {
   }
 
   String getCharacterName() {
-    return '';
+    final validNameRegExp = RegExp(r'^[가-힣a-zA-Z]+$'); // 한글, 영문 대소문자만 허용
+
+    do {
+      print('캐릭터의 이름을 입력하세요:');
+      String? name = stdin.readLineSync();
+
+      if (name == null || name.isEmpty) {
+        print('이름은 비워둘 수 없습니다. 다시 입력해주세요.');
+        continue;
+      }
+      if (!validNameRegExp.hasMatch(name)) {
+        print('이름에는 한글 또는 영문 대소문자만 포함될 수 있습니다. 특수문자나 숫자는 사용할 수 없습니다.');
+        continue;
+      }
+      return name;
+    } while (true);
   }
 
   void startGame() {
