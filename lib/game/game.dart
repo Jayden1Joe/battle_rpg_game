@@ -95,8 +95,9 @@ class Game {
     print('새로운 몬스터가 나타났습니다!');
     Monster monster = getRandomMonster();
     monster.showStatus();
+    print('');
+    bool turn = true; // 캐릭터의 턴
     while (monster.health > 0) {
-      bool turn = true; // 캐릭터의 턴
       if (turn) {
         print('${character.name}의 턴');
         stdout.write('행동을 선택하세요 (1: 공격, 2: 방어): ');
@@ -121,6 +122,19 @@ class Game {
           );
         }
         print('');
+        turn = false; // 턴을 몬스터로 변경
+        continue;
+      } else {
+        // 몬스터의 턴
+        print('${monster.name}의 턴');
+        monster.attackCharacter(character);
+        print(
+          '${monster.name}이(가) ${character.name}에게 ${character.lastDamage}의 데미지를 입혔습니다!',
+        );
+        character.showStatus();
+        monster.showStatus();
+        print('');
+        turn = true; // 턴을 캐릭터로 변경
       }
     }
   }
