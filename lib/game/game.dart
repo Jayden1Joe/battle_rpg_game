@@ -57,7 +57,7 @@ class Game {
     final validNameRegExp = RegExp(r'^[가-힣a-zA-Z]+$'); // 한글, 영문 대소문자만 허용
 
     do {
-      print('캐릭터의 이름을 입력하세요:');
+      stdout.write('캐릭터의 이름을 입력하세요: ');
       String? name = stdin.readLineSync();
 
       if (name == null || name.isEmpty) {
@@ -79,6 +79,9 @@ class Game {
     //설정한 물리친 몬스터 개수만큼 몬스터를 물리치면 게임에서 **승리**합니다.
     loadCharacterStats();
     loadMonsterStats();
+    print('게임을 시작합니다!');
+    character.showStatus();
+    print('');
     battle();
   }
 
@@ -89,8 +92,9 @@ class Game {
     // - 캐릭터는 몬스터 리스트에 있는 몬스터들 중 랜덤으로 뽑혀서 **대결을** 합니다.
     // - 처치한 몬스터는 몬스터 리스트에서 삭제되어야 합니다.
     // - 캐릭터의 체력은 대결 **간에 누적**됩니다.
-
-    getRandomMonster();
+    print('새로운 몬스터가 나타났습니다!');
+    Monster monster = getRandomMonster();
+    monster.showStatus();
   }
 
   Monster getRandomMonster() {

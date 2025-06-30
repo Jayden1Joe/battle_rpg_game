@@ -22,6 +22,6 @@ class Character {
 
   void showStatus() {
     //캐릭터의 현재 체력과 공격력을 매 턴마다 출력합니다.
-    print('$name: 체력 $health, 공격력 $attack');
+    print('$name - 체력 $health, 공격력 $attack, 방어력 $defense');
   }
 }
