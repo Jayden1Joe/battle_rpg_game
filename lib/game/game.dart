@@ -95,6 +95,34 @@ class Game {
     print('새로운 몬스터가 나타났습니다!');
     Monster monster = getRandomMonster();
     monster.showStatus();
+    while (monster.health > 0) {
+      bool turn = true; // 캐릭터의 턴
+      if (turn) {
+        print('${character.name}의 턴');
+        stdout.write('행동을 선택하세요 (1: 공격, 2: 방어): ');
+        String? choice;
+        do {
+          choice = stdin.readLineSync();
+          if (choice == null || (choice != '1' && choice != '2')) {
+            print('잘못된 입력입니다. 1 또는 2를 입력해주세요.');
+          }
+        } while (choice == null || (choice != '1' && choice != '2'));
+        if (choice == '1') {
+          // 공격하기
+          character.attackMonster(monster);
+          print(
+            '${character.name}이(가) ${monster.name}에게 ${character.attack}의 데미지를 입혔습니다!',
+          );
+        } else if (choice == '2') {
+          // 방어하기
+          character.defend(monster);
+          print(
+            '${character.name}이(가) 방어 태세를 취하여 ${character.lastDamage} 만큼 체력을 얻었습니다.',
+          );
+        }
+        print('');
+      }
+    }
   }
 
   Monster getRandomMonster() {

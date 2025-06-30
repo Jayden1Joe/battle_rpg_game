@@ -21,6 +21,6 @@ class Monster {
 
   void showStatus() {
     //몬스터의 현재 체력과 공격력을 매 턴마다 출력합니다.
-    print('$name: 체력 $health, 공격력 $maxAttack');
+    print('$name - 체력: $health, 공격력: $maxAttack');
   }
 }
