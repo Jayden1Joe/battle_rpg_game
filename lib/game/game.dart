@@ -6,11 +6,11 @@ import 'package:battle_rpg_game/models/character.dart';
 import 'package:battle_rpg_game/models/monster.dart';
 
 class Game {
-  Character character;
-  List<Monster> monsters;
+  late Character character;
+  List<Monster> monsters = [];
   int monstersDefeated = 0;
 
-  Game(this.character, this.monsters);
+  Game();
 
   void loadCharacterStats() {
     try {
