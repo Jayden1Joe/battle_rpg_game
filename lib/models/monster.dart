@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:battle_rpg_game/models/character.dart';
+
 class Monster {
   String name;
   int health;
@@ -14,10 +16,11 @@ class Monster {
     int attack = max(Random().nextInt(maxAttack + 1), character.defense);
     int damage = attack - character.defense;
     character.health -= damage;
+    character.lastDamage = damage;
   }
 
   void showStatus() {
     //몬스터의 현재 체력과 공격력을 매 턴마다 출력합니다.
-    print('$name: 체력 $health, 공격력 ');
+    print('$name: 체력 $health, 공격력 $maxAttack');
   }
 }
