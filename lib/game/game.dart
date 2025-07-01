@@ -120,9 +120,6 @@ class Game {
         } while (choice != '1' && choice != '2' && choice != '3');
         if (choice == '1') {
           character.attackEntity(monster);
-          print(
-            '${character.name}이(가) ${monster.name}에게 ${character.attack}의 데미지를 입혔습니다!',
-          );
         } else if (choice == '2') {
           character.defend(monster);
           print(
@@ -140,10 +137,8 @@ class Game {
         print('');
         // 몬스터의 턴
         print('${monster.name}의 턴');
+        monster.increaseDefensePerTurn(); // 몬스터의 방어력 증가
         monster.attackEntity(character);
-        print(
-          '${monster.name}이(가) ${character.name}에게 ${character.lastDamage}의 데미지를 입혔습니다!',
-        );
         character.showStatus();
         monster.showStatus();
         turn = true; // 턴을 캐릭터로 변경

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:battle_rpg_game/models/entity.dart';
 import 'package:battle_rpg_game/models/monster.dart';
 
@@ -13,7 +15,9 @@ class Character extends Entity {
   @override
   void attackEntity(Entity monster) {
     //몬스터에게 공격을 가하여 피해를 입힙니다.
-    monster.health -= attack;
+    int damage = max(attack - monster.defense, 0); // 최소 데미지는 0 이상
+    monster.health -= damage;
+    print('${monster.name}이(가) ${name}에게 ${damage}의 데미지를 입혔습니다!');
   }
 
   @override

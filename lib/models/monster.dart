@@ -5,6 +5,7 @@ import 'package:battle_rpg_game/models/entity.dart';
 
 class Monster extends Entity {
   Monster(String name, int health, int attack) : super(name, health, attack, 0);
+  int defenseTurnCounter = 0;
 
   @override
   void attackEntity(Entity character) {
@@ -16,11 +17,21 @@ class Monster extends Entity {
     if (character is Character) {
       character.lastDamage = damage;
     }
+    print('${name}이(가) ${character.name}에게 ${damage}의 데미지를 입혔습니다!');
   }
 
   @override
   void showStatus() {
     //몬스터의 현재 체력과 공격력을 매 턴마다 출력합니다.
-    print('$name - 체력: $health, 공격력: $attack');
+    print('$name - 체력: $health, 공격력: $attack, 방어력: $defense');
+  }
+
+  void increaseDefensePerTurn() {
+    defenseTurnCounter++;
+    if (defenseTurnCounter == 3) {
+      defense += 2;
+      defenseTurnCounter = 0;
+      print('$name의 방어력이 증가했습니다! 현재 방어력: $defense');
+    }
   }
 }
