@@ -107,8 +107,8 @@ class Game {
     monster.showStatus();
     bool turn = true; // 캐릭터의 턴
     while (monster.health > 0 && character.health > 0) {
+      print('');
       if (turn) {
-        print('');
         print('${character.name}의 턴');
         stdout.write('행동을 선택하세요 (1: 공격, 2: 방어, 3: 아이템 사용): ');
         String? choice;
@@ -122,9 +122,6 @@ class Game {
           character.attackEntity(monster);
         } else if (choice == '2') {
           character.defend(monster);
-          print(
-            '${character.name}이(가) 방어 태세를 취하여 ${character.lastDamage} 만큼 체력을 얻었습니다.',
-          );
         } else if (choice == '3') {
           character.useItem(); // 아이템 사용
           turn = true;
@@ -134,7 +131,6 @@ class Game {
         turn = false; // 턴을 몬스터로 변경
         continue;
       } else {
-        print('');
         // 몬스터의 턴
         print('${monster.name}의 턴');
         monster.increaseDefensePerTurn(); // 몬스터의 방어력 증가
@@ -148,7 +144,6 @@ class Game {
     if (character.health <= 0) {
       print('${character.name}이(가) 쓰러졌습니다! 게임 오버!');
       saveResult(false);
-      exit(0);
     }
     print('${monster.name}을(를) 물리쳤습니다!');
     monstersDefeated++;
@@ -156,25 +151,27 @@ class Game {
     if (monsters.isEmpty) {
       print('모든 몬스터를 물리쳤습니다! 게임에서 승리했습니다!');
       saveResult(true);
-      exit(0);
     } else {
-      stdout.write('다음 몬스터와 대결하시겠습니까? (y/n): ');
-      String? nextChoice;
-      do {
-        nextChoice = stdin.readLineSync()?.toLowerCase();
-        if (nextChoice != 'y' && nextChoice != 'n') {
-          print('잘못된 입력입니다. y 또는 n을 입력해주세요.');
-        }
-      } while (nextChoice != 'y' && nextChoice != 'n');
-      print('');
-      if (nextChoice == 'y') {
-        print('다음 몬스터와 대결을 시작합니다!');
-        battle(); // 다음 몬스터와 대결
-      } else {
-        print('게임을 종료합니다. 물리친 몬스터 수: $monstersDefeated');
-        saveResult(false);
-        exit(0);
+      nextBattle();
+    }
+  }
+
+  void nextBattle() {
+    stdout.write('다음 몬스터와 대결하시겠습니까? (y/n): ');
+    String? nextChoice;
+    do {
+      nextChoice = stdin.readLineSync()?.toLowerCase();
+      if (nextChoice != 'y' && nextChoice != 'n') {
+        print('잘못된 입력입니다. y 또는 n을 입력해주세요.');
       }
+    } while (nextChoice != 'y' && nextChoice != 'n');
+    print('');
+    if (nextChoice == 'y') {
+      print('다음 몬스터와 대결을 시작합니다!');
+      battle(); // 다음 몬스터와 대결
+    } else {
+      print('게임을 종료합니다. 물리친 몬스터 수: $monstersDefeated');
+      saveResult(false);
     }
   }
 
@@ -197,6 +194,7 @@ class Game {
     } else {
       print('결과 저장을 취소했습니다.');
     }
+    exit(0);
   }
 
   Monster getRandomMonster() {

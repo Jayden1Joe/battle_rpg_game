@@ -13,11 +13,11 @@ class Character extends Entity {
     : originalAttack = attack;
 
   @override
-  void attackEntity(Entity monster) {
+  void attackEntity(Entity target) {
     //몬스터에게 공격을 가하여 피해를 입힙니다.
-    int damage = max(attack - monster.defense, 0); // 최소 데미지는 0 이상
-    monster.health -= damage;
-    print('${monster.name}이(가) ${name}에게 ${damage}의 데미지를 입혔습니다!');
+    int damage = max(attack - target.defense, 0); // 최소 데미지는 0 이상
+    target.health -= damage;
+    print('${target.name}이(가) $name에게 $damage의 데미지를 입혔습니다!');
   }
 
   @override
@@ -30,6 +30,7 @@ class Character extends Entity {
     //방어 시 특정 행동을 수행합니다.
     //예) 대결 상대인 몬스터가 입힌 데미지만큼 캐릭터의 체력을 상승시킵니다.
     health += lastDamage;
+    print('$name이(가) 방어 태세를 취하여 $lastDamage 만큼 체력을 얻었습니다.');
   }
 
   void useItem() {
