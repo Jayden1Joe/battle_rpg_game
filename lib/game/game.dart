@@ -110,27 +110,30 @@ class Game {
       if (turn) {
         print('');
         print('${character.name}의 턴');
-        stdout.write('행동을 선택하세요 (1: 공격, 2: 방어): ');
+        stdout.write('행동을 선택하세요 (1: 공격, 2: 방어, 3: 아이템 사용): ');
         String? choice;
         do {
           choice = stdin.readLineSync() ?? '';
-          if (choice != '1' && choice != '2') {
-            print('잘못된 입력입니다. 1 또는 2를 입력해주세요.');
+          if (choice != '1' && choice != '2' && choice != '3') {
+            print('잘못된 입력입니다. 1, 2, 3 중 하나를 입력해주세요.');
           }
-        } while (choice != '1' && choice != '2');
+        } while (choice != '1' && choice != '2' && choice != '3');
         if (choice == '1') {
-          // 공격하기
           character.attackEntity(monster);
           print(
             '${character.name}이(가) ${monster.name}에게 ${character.attack}의 데미지를 입혔습니다!',
           );
         } else if (choice == '2') {
-          // 방어하기
           character.defend(monster);
           print(
             '${character.name}이(가) 방어 태세를 취하여 ${character.lastDamage} 만큼 체력을 얻었습니다.',
           );
+        } else if (choice == '3') {
+          character.useItem(); // 아이템 사용
+          turn = true;
+          continue; // 아이템 사용 후 턴을 넘김
         }
+        character.resetAttack();
         turn = false; // 턴을 몬스터로 변경
         continue;
       } else {
