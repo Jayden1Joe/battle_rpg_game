@@ -71,6 +71,7 @@ class Game {
       loadCharacterStats();
       loadMonsterStats();
       print('게임을 시작합니다!');
+      applyBonusHealth(character);
       character.showStatus();
       battle();
     } on FileSystemException catch (e) {
@@ -79,6 +80,17 @@ class Game {
       print('❌ 데이터 형식이 잘못되었습니다: ${e.message}');
     } catch (e) {
       print('⚠️ 알 수 없는 에러 발생: $e');
+    }
+  }
+
+  void applyBonusHealth(Character character) {
+    final random = Random();
+    final chance = random.nextDouble(); // 0.0 ~ 1.0 사이의 랜덤 실수
+
+    if (chance < 0.3) {
+      // 30% 확률
+      character.health += 10;
+      print('보너스 체력을 얻었습니다! 현재 체력: ${character.health}');
     }
   }
 
