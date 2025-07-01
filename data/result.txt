@@ -3,3 +3,4 @@ sfda, 5, 승리
 adfs, -6, 패배
 afsd, 22, 승리
 fads, 3, 승리
+fsda, 18, 패배

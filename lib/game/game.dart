@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:battle_rpg_game/models/character.dart';
 import 'package:battle_rpg_game/models/monster.dart';
+import 'package:battle_rpg_game/utils/route_validated_input.dart';
 
 class Game {
   late Character character;
@@ -110,23 +111,18 @@ class Game {
       print('');
       if (turn) {
         print('${character.name}의 턴');
-        stdout.write('행동을 선택하세요 (1: 공격, 2: 방어, 3: 아이템 사용): ');
-        String? choice;
-        do {
-          choice = stdin.readLineSync() ?? '';
-          if (choice != '1' && choice != '2' && choice != '3') {
-            print('잘못된 입력입니다. 1, 2, 3 중 하나를 입력해주세요.');
-          }
-        } while (choice != '1' && choice != '2' && choice != '3');
-        if (choice == '1') {
-          character.attackEntity(monster);
-        } else if (choice == '2') {
-          character.defend(monster);
-        } else if (choice == '3') {
-          character.useItem(); // 아이템 사용
-          turn = true;
-          continue; // 아이템 사용 후 턴을 넘김
-        }
+        routeValidatedInput(
+          prompt: '행동을 선택하세요 (1: 공격, 2: 방어, 3: 아이템 사용): ',
+          actions: {
+            '1': () => character.attackEntity(monster),
+            '2': () => character.defend(monster),
+            '3': () {
+              character.useItem(); // 아이템 사용
+              turn = true;
+              return 'REPEAT'; // 아이템 사용 후 다시 턴을 캐릭터로 유지
+            },
+          },
+        );
         character.resetAttack();
         turn = false; // 턴을 몬스터로 변경
         continue;
@@ -157,43 +153,39 @@ class Game {
   }
 
   void nextBattle() {
-    stdout.write('다음 몬스터와 대결하시겠습니까? (y/n): ');
-    String? nextChoice;
-    do {
-      nextChoice = stdin.readLineSync()?.toLowerCase();
-      if (nextChoice != 'y' && nextChoice != 'n') {
-        print('잘못된 입력입니다. y 또는 n을 입력해주세요.');
-      }
-    } while (nextChoice != 'y' && nextChoice != 'n');
-    print('');
-    if (nextChoice == 'y') {
-      print('다음 몬스터와 대결을 시작합니다!');
-      battle(); // 다음 몬스터와 대결
-    } else {
-      print('게임을 종료합니다. 물리친 몬스터 수: $monstersDefeated');
-      saveResult(false);
-    }
+    routeValidatedInput(
+      prompt: '다음 몬스터와 대결하시겠습니까? (y/n): ',
+      preprocess: (input) => input.toLowerCase(),
+      actions: {
+        'y': () {
+          print('다음 몬스터와 대결을 시작합니다!');
+          battle(); // 다음 몬스터와 대결
+        },
+        'n': () {
+          print('게임을 종료합니다. 물리친 몬스터 수: $monstersDefeated');
+          saveResult(false);
+        },
+      },
+    );
   }
 
   void saveResult(bool isWin) {
-    stdout.write('결과를 저장하시겠습니까? (y/n): ');
-    String? saveChoice;
-    do {
-      saveChoice = stdin.readLineSync()?.toLowerCase();
-      if (saveChoice != 'y' && saveChoice != 'n') {
-        print('잘못된 입력입니다. y 또는 n을 입력해주세요.');
-      }
-    } while (saveChoice != 'y' && saveChoice != 'n');
-
-    if (saveChoice == 'y') {
-      final result =
-          '${character.name}, ${character.health}, ${isWin ? '승리' : '패배'}\n';
-      final file = File('data/result.txt');
-      file.writeAsStringSync(result, mode: FileMode.append);
-      print('결과가 result.txt 파일에 저장되었습니다.');
-    } else {
-      print('결과 저장을 취소했습니다.');
-    }
+    routeValidatedInput(
+      prompt: '결과를 저장하시겠습니까? (y/n): ',
+      preprocess: (input) => input.toLowerCase(),
+      actions: {
+        'y': () {
+          final result =
+              '${character.name}, ${character.health}, ${isWin ? '승리' : '패배'}\n';
+          final file = File('data/result.txt');
+          file.writeAsStringSync(result, mode: FileMode.append);
+          print('결과가 result.txt 파일에 저장되었습니다.');
+        },
+        'n': () {
+          print('결과 저장을 취소했습니다.');
+        },
+      },
+    );
     exit(0);
   }
 
