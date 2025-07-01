@@ -13,43 +13,33 @@ class Game {
   Game();
 
   void loadCharacterStats() {
-    try {
-      final file = File('data/characters.txt');
-      final contents = file.readAsStringSync();
-      final stats = contents.split(',');
-      if (stats.length != 3) throw FormatException('Invalid character data');
+    final file = File('data/characters.txt');
+    final contents = file.readAsStringSync();
+    final stats = contents.split(',');
+    if (stats.length != 3) throw FormatException('Invalid character data');
 
-      int health = int.parse(stats[0]);
-      int attack = int.parse(stats[1]);
-      int defense = int.parse(stats[2]);
+    int health = int.parse(stats[0]);
+    int attack = int.parse(stats[1]);
+    int defense = int.parse(stats[2]);
 
-      String name = getCharacterName();
-      character = Character(name, health, attack, defense);
-    } catch (e) {
-      print('캐릭터 데이터를 불러오는 데 실패했습니다: $e');
-      exit(1);
-    }
+    String name = getCharacterName();
+    character = Character(name, health, attack, defense);
   }
 
   void loadMonsterStats() {
-    try {
-      final file = File('data/monsters.txt');
-      final lines = file.readAsLinesSync();
+    final file = File('data/monsters.txt');
+    final lines = file.readAsLinesSync();
 
-      for (var line in lines) {
-        final stats = line.split(',');
-        if (stats.length != 3) {
-          throw FormatException('Invalid monster data: $line');
-        }
-        String name = stats[0];
-        int health = int.parse(stats[1]);
-        int attack = int.parse(stats[2]);
-
-        monsters.add(Monster(name, health, attack));
+    for (var line in lines) {
+      final stats = line.split(',');
+      if (stats.length != 3) {
+        throw FormatException('Invalid monster data: $line');
       }
-    } catch (e) {
-      print('몬스터 데이터를 불러오는 데 실패했습니다: $e');
-      exit(1);
+      String name = stats[0];
+      int health = int.parse(stats[1]);
+      int attack = int.parse(stats[2]);
+
+      monsters.add(Monster(name, health, attack));
     }
   }
 
@@ -77,11 +67,19 @@ class Game {
     //몬스터를 물리칠 때마다 다음 몬스터와 대결할 건지 선택할 수 있습니다.
     //예) “다음 몬스터와 대결하시겠습니까? (y/n)”
     //설정한 물리친 몬스터 개수만큼 몬스터를 물리치면 게임에서 **승리**합니다.
-    loadCharacterStats();
-    loadMonsterStats();
-    print('게임을 시작합니다!');
-    character.showStatus();
-    battle();
+    try {
+      loadCharacterStats();
+      loadMonsterStats();
+      print('게임을 시작합니다!');
+      character.showStatus();
+      battle();
+    } on FileSystemException catch (e) {
+      print('📁 파일을 찾을 수 없거나 읽는 데 실패했습니다: ${e.message}');
+    } on FormatException catch (e) {
+      print('❌ 데이터 형식이 잘못되었습니다: ${e.message}');
+    } catch (e) {
+      print('⚠️ 알 수 없는 에러 발생: $e');
+    }
   }
 
   void battle() {
