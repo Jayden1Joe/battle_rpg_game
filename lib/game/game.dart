@@ -110,7 +110,7 @@ class Game {
         } while (choice != '1' && choice != '2');
         if (choice == '1') {
           // 공격하기
-          character.attackMonster(monster);
+          character.attackEntity(monster);
           print(
             '${character.name}이(가) ${monster.name}에게 ${character.attack}의 데미지를 입혔습니다!',
           );
@@ -127,7 +127,7 @@ class Game {
         print('');
         // 몬스터의 턴
         print('${monster.name}의 턴');
-        monster.attackCharacter(character);
+        monster.attackEntity(character);
         print(
           '${monster.name}이(가) ${character.name}에게 ${character.lastDamage}의 데미지를 입혔습니다!',
         );
@@ -184,7 +184,7 @@ class Game {
       final result =
           '${character.name}, ${character.health}, ${isWin ? '승리' : '패배'}\n';
       final file = File('data/result.txt');
-      file.writeAsStringSync(result.trim(), mode: FileMode.append);
+      file.writeAsStringSync(result, mode: FileMode.append);
       print('결과가 result.txt 파일에 저장되었습니다.');
     } else {
       print('결과 저장을 취소했습니다.');

@@ -1,15 +1,13 @@
+import 'package:battle_rpg_game/models/entity.dart';
 import 'package:battle_rpg_game/models/monster.dart';
 
-class Character {
-  String name;
-  int health;
-  int attack;
-  int defense;
+class Character extends Entity {
   int lastDamage = 0;
 
-  Character(this.name, this.health, this.attack, this.defense);
+  Character(super.name, super.health, super.attack, super.defense);
 
-  void attackMonster(Monster monster) {
+  @override
+  void attackEntity(Entity monster) {
     //몬스터에게 공격을 가하여 피해를 입힙니다.
     monster.health -= attack;
   }
@@ -20,6 +18,7 @@ class Character {
     health += lastDamage;
   }
 
+  @override
   void showStatus() {
     //캐릭터의 현재 체력과 공격력을 매 턴마다 출력합니다.
     print('$name - 체력: $health, 공격력: $attack, 방어력: $defense');
